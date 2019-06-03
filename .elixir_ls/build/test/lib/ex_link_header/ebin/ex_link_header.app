@@ -1,0 +1,11 @@
+{application,ex_link_header,
+             [{applications,[kernel,stdlib,elixir,logger]},
+              {description,"Parse HTTP link headers in Elixir.\n"},
+              {modules,['Elixir.ExLinkHeader',
+                        'Elixir.ExLinkHeader.BuildError',
+                        'Elixir.ExLinkHeader.Builder',
+                        'Elixir.ExLinkHeader.ParseError',
+                        'Elixir.ExLinkHeader.Parser',
+                        'Elixir.ExLinkHeaderEntry']},
+              {registered,[]},
+              {vsn,"0.0.5"}]}.
