@@ -44,31 +44,63 @@ defmodule StattleshipEx.NBA do
   end
 
   @doc """
+  Fetches game stats for players. Can find by game, player, date, etc.
 
-  slug = "nba-2018-2019-gs-tor-2019-06-2-2000"
-  {:ok, %{body: games}} = StattleshipEx.NBA.play_by_play(slug, quarter: 2)
-  {:ok, %{body: games}} = StattleshipEx.NBA.play_by_play(slug, quarter: 4, fetch_all: true)
+  ## Examples:
 
-  Query params:
+      slug = "nba-2018-2019-gs-tor-2019-06-2-2000"
+      {:ok, %{body: games}} = StattleshipEx.NBA.play_by_play(slug, quarter: 2)
+      {:ok, %{body: games}} = StattleshipEx.NBA.play_by_play(slug, quarter: 4, fetch_all: true)
 
-  per_page 20 Items per page with maximum of 40.
-  page  Page of results
-  id  Required game slug as a resource, ie play_by_play/nba-2016-2017-pho-lac-2016-10-31-1930
-  quarter  Number
-  team_id  Team slug such as nba-bos for the Celtics.
-  event_type  Filter by a type of play. See Basketball Play by Play Event Types above.
-  include_stats  Optional. If present will return stats per player involved in play, such as who made the shot and who got the assist.
-  include_on_court  Optional. If present will return every player on the court for the play.
-  per_page  You can request up to 100 per page
+  ## Query Params:
+
+  * `per_page` 20 Items per page with maximum of 40.
+  * `game_id` Game slug such as nba-2015-2016-chi-dal-2015-12-26-2030 for Bulls vs Mavericks
+  * `player_id` Player slug such as nba-lebron-james for Lebron James
+  * `team_id` Team slug such as nba-gs for the Warriors
+  * `interval_type` regularseason See interval_type for sport.
+  * `on` Friendly date such as today or tomorrow; or a timestamp; or a date such as 2016-05-22
+  * `since` Friendly date such as 1 week ago or 4 days ago or last Sunday; or a timestamp such as 1448820000
+  * `season_id` Current season Season slug such as nba-2015-2016
+  * `status` Game status of in_progress upcoming or ended
   """
-  def play_by_play(game_slug, query \\ []) do
-    res = StattleshipEx.get("/basketball/nba/play_by_play/#{game_slug}", query: query)
-    res
+  def game_logs(query \\ []) do
+    StattleshipEx.get("/basketball/nba/game_logs", query: query)
   end
 
-  # Docs say this is an unsupported sport but it seems to work fine.
-  # per_page 20 Items per page with maximum of 40.
-  # page  Page of results
+  @doc """
+  Fetch play by play data for a game.
+
+  ## Examples:
+
+      slug = "nba-2018-2019-gs-tor-2019-06-2-2000"
+      {:ok, %{body: games}} = StattleshipEx.NBA.play_by_play(slug, quarter: 2)
+      {:ok, %{body: games}} = StattleshipEx.NBA.play_by_play(slug, quarter: 4, fetch_all: true)
+
+  ## Query params:
+
+  * `per_page` 20 Items per page with maximum of 40.
+  * `page`  Page of results
+  * id  Required game slug as a resource, ie play_by_play/nba-2016-2017-pho-lac-2016-10-31-1930
+  * `quarter`  Number
+  * `team_id`  Team slug such as nba-bos for the Celtics.
+  * `event_type`  Filter by a type of play. See Basketball Play by Play Event Types above.
+  * `include_stats`  Optional. If present will return stats per player involved in play, such as who made the shot and who got the assist.
+  * `include_on_court`  Optional. If present will return every player on the court for the play.
+  * `per_page`  You can request up to 100 per page
+  """
+  def play_by_play(game_slug, query \\ []) do
+    StattleshipEx.get("/basketball/nba/play_by_play/#{game_slug}", query: query)
+  end
+
+  @doc """
+  Docs say this is an unsupported sport but it seems to work fine.
+
+  ## Query Params:
+
+  * `per_page` 20 Items per page with maximum of 40.
+  * `page` Page of results
+  """
   def scoring_plays(query \\ []) do
     StattleshipEx.get("/basketball/nba/scoring_plays", query: query)
   end
@@ -77,7 +109,7 @@ defmodule StattleshipEx.NBA do
   per_page 20 Items per page with maximum of 40.
   page  Page of results
   """
-  def(query \\ []) do
+  def teams(query \\ []) do
     StattleshipEx.get("/basketball/nba/teams", query: query)
   end
 
@@ -147,7 +179,6 @@ defmodule StattleshipEx.NBA do
     StattleshipEx.get("/basketball/nba/rankings", query: query)
   end
 
-
   # per_page 20 Items per page with maximum of 40.
   # page  Page of results
   # team_id  Team slug such as nba-ny for the Knicks
@@ -155,7 +186,6 @@ defmodule StattleshipEx.NBA do
   def rosters(query \\ []) do
     StattleshipEx.get("/basketball/nba/rosters", query: query)
   end
-
 
   @doc """
   per_page 20 Items per page with maximum of 40.

@@ -54,8 +54,11 @@ defmodule StattleshipEx do
          [{:ok, %{body: _body, headers: headers, status: _status}} | _tail] = res,
          opts
        ) do
-    link_header = Enum.find(headers, fn h -> elem(h, 0) == "link" end)
-    parsed_links = ExLinkHeader.parse!(elem(link_header, 1))
+
+    parsed_links = case Enum.find(headers, fn h -> elem(h, 0) == "link" end) do
+      [_, header] -> ExLinkHeader.parse!(header)
+      _ -> %{next: nil}
+    end
 
     case parsed_links.next do
       nil ->
@@ -131,7 +134,7 @@ defmodule StattleshipEx do
   end
 
   defp config_key do
-    case Application.get_env(:stat, :api_key) do
+    case Application.get_env(:stattleship_ex, :api_key) do
       # Grabs the name you configured out of ENV
       {:system, env_key} ->
         IO.puts(env_key)
