@@ -55,11 +55,15 @@ defmodule StattleshipEx do
          opts
        ) do
 
+    # IO.inspect(headers)
+    # I swear this used to work with [ ] on the case clause
     parsed_links = case Enum.find(headers, fn h -> elem(h, 0) == "link" end) do
-      [_, header] -> ExLinkHeader.parse!(header)
+      {_, header} -> ExLinkHeader.parse!(header)
       _ -> %{next: nil}
     end
 
+
+    # IO.inspect(parsed_links)
     case parsed_links.next do
       nil ->
         Logger.debug("No more pages to get.")
